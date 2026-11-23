@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F2ECE2">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Mon Jardin">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Mon Jardin de vie</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Jost:wght@400;500;600&display=swap">
+<style>
+/* Layout : une colonne mobile (max 560px), en-tête calme, barre d'onglets en bas comme une appli. */
+:root{
+  --bg:#F2ECE2; --surface:#E9E0D1; --card:#F8F4EC; --line:#DCD1BF;
+  --ink:#2E3226; --muted:#77745F; --sage:#7D8763; --olive:#4E5939; --on-olive:#F6F1E6;
+  --clay:#B5876A; --done:#7D8763; --shadow:0 1px 2px rgba(60,55,40,.06),0 6px 20px rgba(60,55,40,.06);
+  --serif:"Cormorant Garamond","Iowan Old Style","Palatino Linotype",Georgia,serif;
+  --sans:"Jost","Avenir Next","Segoe UI",system-ui,sans-serif;
+  --nav-h:68px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#1D2019; --surface:#272B22; --card:#2B3026; --line:#3A4033;
+  --ink:#ECE6D7; --muted:#A8A48F; --sage:#A3AE85; --olive:#B9C49A; --on-olive:#1D2019;
+  --clay:#D0A385; --done:#A3AE85; --shadow:0 1px 2px rgba(0,0,0,.3); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#1D2019; --surface:#272B22; --card:#2B3026; --line:#3A4033;
+  --ink:#ECE6D7; --muted:#A8A48F; --sage:#A3AE85; --olive:#B9C49A; --on-olive:#1D2019;
+  --clay:#D0A385; --done:#A3AE85; --shadow:0 1px 2px rgba(0,0,0,.3); color-scheme:dark}
+
+*{box-sizing:border-box}
+html,body{background:var(--bg)}
+body{color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-tap-highlight-color:transparent;overflow-x:hidden}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--sage);outline-offset:2px}
+.wrap{max-width:560px;margin:0 auto;padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px));padding-block:12px calc(var(--nav-h) + 28px + env(safe-area-inset-bottom,0px));position:relative}
+
+/* formes organiques en fond */
+.blob{position:fixed;z-index:0;pointer-events:none;background:var(--surface);opacity:.9}
+.blob.a{width:340px;height:300px;top:-120px;right:-110px;border-radius:58% 42% 63% 37%/45% 55% 45% 55%}
+.blob.b{width:260px;height:260px;bottom:40px;left:-150px;border-radius:40% 60% 38% 62%/58% 40% 60% 42%;opacity:.6}
+main{position:relative;z-index:1}
+
+header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:8px 4px}
+.brand{display:flex;align-items:center;gap:8px;font-family:var(--serif);font-size:1.25rem;font-weight:600;letter-spacing:.01em}
+.brand svg{width:22px;height:22px;color:var(--sage)}
+.eyebrow{font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 12px;font-size:.8rem;font-weight:500}
+.pill[aria-pressed="true"]{background:var(--olive);color:var(--on-olive);border-color:var(--olive)}
+.pill .dot{width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.5}
+.pill[aria-pressed="true"] .dot{opacity:1;animation:pulse 1s infinite}
+@keyframes pulse{50%{transform:scale(1.6);opacity:.4}}
+
+h1,h2,h3{font-family:var(--serif);font-weight:500;margin:0;text-wrap:balance;line-height:1.1}
+h1{font-size:2.5rem}
+h1 em,h2 em{font-style:italic;color:var(--sage)}
+h2{font-size:1.75rem}
+h3{font-size:1.3rem}
+p{margin:0}
+.muted{color:var(--muted)}
+.section{display:grid;gap:18px;padding-top:18px}
+.hero{display:grid;gap:6px;padding-top:14px}
+
+/* cartes */
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:18px;box-shadow:var(--shadow)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tile{display:grid;gap:10px;align-content:start;text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px;min-width:0}
+.tile .ic{width:38px;height:38px;border-radius:46% 54% 42% 58%/52% 44% 56% 48%;background:var(--surface);display:grid;place-items:center;color:var(--olive)}
+.tile .ic svg{width:20px;height:20px}
+.tag{display:inline-block;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--clay);font-weight:600}
+.tag.ok{color:var(--sage)}
+
+/* anneau de progression */
+.today{display:flex;align-items:center;gap:18px;background:var(--olive);color:var(--on-olive);border:none}
+.today .eyebrow{color:inherit;opacity:.75}
+.ring{width:84px;height:84px;flex:none}
+.ring circle{fill:none;stroke-width:7}
+.ring .bg{stroke:currentColor;opacity:.2}
+.ring .fg{stroke:currentColor;stroke-linecap:round;transition:stroke-dashoffset .5s ease}
+.ring text{fill:currentColor;font-family:var(--serif);font-size:24px;font-weight:600}
+
+/* habitudes */
+.hab-head{display:flex;align-items:end;justify-content:space-between;gap:12px}
+.btn{border:none;border-radius:999px;padding:11px 18px;font-weight:500;font-size:.9rem;background:var(--olive);color:var(--on-olive)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.small{padding:7px 13px;font-size:.8rem}
+.list{display:grid;gap:12px}
+.habit{display:grid;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:14px 14px 14px 16px}
+.habit .row{display:flex;align-items:center;gap:12px}
+.habit .name{flex:1;min-width:0;font-weight:500;overflow-wrap:anywhere}
+.habit .streak{font-size:.78rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.check{width:46px;height:46px;flex:none;border-radius:50%;border:1.5px solid var(--hc,var(--sage));background:transparent;display:grid;place-items:center;transition:background .2s,transform .15s}
+.check svg{width:22px;height:22px;opacity:0;transform:scale(.6);transition:.2s;color:var(--on-olive)}
+.check[aria-pressed="true"]{background:var(--hc,var(--sage))}
+.check[aria-pressed="true"] svg{opacity:1;transform:none}
+.check:active{transform:scale(.92)}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.day{display:grid;justify-items:center;gap:3px;background:none;border:none;padding:2px 0}
+.day small{font-size:.66rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.day span{width:26px;height:26px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-size:.72rem;font-variant-numeric:tabular-nums;color:var(--muted)}
+.day.on span{background:var(--hc,var(--sage));border-color:var(--hc,var(--sage));color:var(--on-olive)}
+.day.is-today small{color:var(--ink);font-weight:600}
+.del{border:none;background:none;color:var(--clay);font-size:.8rem;padding:6px 4px;font-weight:500}
+.confirm{display:flex;gap:8px;align-items:center;font-size:.85rem}
+
+/* historique 5 semaines */
+.heat{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.heat i{aspect-ratio:1;border-radius:38%;background:var(--surface);display:block;max-width:100%}
+.heat-legend{display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted)}
+
+/* feuille d'ajout */
+.sheet-bg{position:fixed;inset:0;background:rgba(30,32,25,.35);z-index:30;display:flex;align-items:flex-end;justify-content:center}
+.sheet{width:100%;max-width:560px;background:var(--bg);border-radius:28px 28px 0 0;padding:22px max(20px,env(safe-area-inset-right,0px)) calc(26px + env(safe-area-inset-bottom,0px)) max(20px,env(safe-area-inset-left,0px));display:grid;gap:16px}
+.field{display:grid;gap:6px}
+.field label{font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.field input{width:100%;font:inherit;font-size:1rem;padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.swatches{display:flex;gap:10px;flex-wrap:wrap}
+.swatches button{width:34px;height:34px;border-radius:50%;border:2px solid transparent;background:var(--c)}
+.swatches button[aria-pressed="true"]{border-color:var(--ink)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 12px;font-size:.82rem}
+
+/* aperçus des parties à venir */
+.soon{display:grid;gap:14px}
+.soon ul{margin:0;padding-left:18px;display:grid;gap:6px}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;font-variant-numeric:tabular-nums}
+.cal b{font-weight:500;font-size:.68rem;text-align:center;color:var(--muted);text-transform:uppercase}
+.cal span{aspect-ratio:1;display:grid;place-items:center;border-radius:12px;font-size:.85rem;max-width:100%}
+.cal .trip{background:color-mix(in srgb,var(--clay) 28%,transparent)}
+.cal .trip.s{border-radius:12px 4px 4px 12px}.cal .trip.e{border-radius:4px 12px 12px 4px}.cal .trip.m{border-radius:4px}
+.cal .t{outline:1.5px solid var(--olive)}
+.legend{display:flex;align-items:center;gap:8px;font-size:.82rem}
+.legend i{width:14px;height:14px;border-radius:5px;background:color-mix(in srgb,var(--clay) 28%,transparent)}
+.ex{font-size:.72rem;color:var(--muted);font-style:italic}
+.meal{display:flex;justify-content:space-between;gap:10px;padding-block:8px;border-bottom:1px dashed var(--line);font-size:.92rem}
+.meal:last-child{border-bottom:none}
+.bar{height:8px;border-radius:99px;background:var(--surface);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--sage);border-radius:99px}
+.course{display:grid;gap:6px}
+.course .top{display:flex;justify-content:space-between;font-size:.9rem}
+
+/* barre d'onglets */
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--line);padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px))}
+nav.tabs .in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr)}
+nav.tabs a{display:grid;justify-items:center;gap:2px;text-decoration:none;color:var(--muted);font-size:.68rem;padding:6px 0;border-radius:14px}
+nav.tabs a svg{width:22px;height:22px}
+nav.tabs a[aria-current="page"]{color:var(--olive);font-weight:600}
+nav.tabs a[aria-current="page"] svg{background:var(--surface);border-radius:10px;padding:0;box-shadow:0 0 0 5px var(--surface)}
+.empty{text-align:center;padding:26px 10px;display:grid;gap:10px;justify-items:center}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+
+<div class="blob a" aria-hidden="true"></div>
+<div class="blob b" aria-hidden="true"></div>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M12 21V9"/><path d="M12 13c-3.5 0-6-2.5-6-6 3.5 0 6 2.5 6 6Z"/><path d="M12 10c0-3.3 2.3-6 6-6 0 3.3-2.5 6-6 6Z"/></svg>
+      Mon Jardin
+    </div>
+    <button class="pill" id="focus" aria-pressed="false" title="Son de concentration 40 Hz"><span class="dot"></span>40 Hz</button>
+  </header>
+  <main id="view"></main>
+</div>
+
+<nav class="tabs" aria-label="Parties du site">
+  <div class="in">
+    <a href="#accueil" data-r="accueil"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 12 4l8 7v8a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1Z"/></svg>Accueil</a>
+    <a href="#agenda" data-r="agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="4" y="5" width="16" height="15" rx="3"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>Agenda</a>
+    <a href="#habitudes" data-r="habitudes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg>Habitudes</a>
+    <a href="#repas" data-r="repas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 13h16a8 8 0 0 1-16 0Z"/><path d="M9 9c0-2 2-2 2-4M14 9c0-2 2-2 2-4"/></svg>Repas</a>
+    <a href="#cours" data-r="cours"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5C6 4.5 9 4.5 12 6c3-1.5 6-1.5 8-.5V19c-2-1-5-1-8 .5-3-1.5-6-1.5-8-.5Z"/><path d="M12 6v13.5"/></svg>Cours</a>
+  </div>
+</nav>
+
+<div id="sheet" hidden></div>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s);
+const KEY='jardin.v1';
+const COLORS=['#7D8763','#B5876A','#8A9A9B','#C2A25F','#9B7C8E'];
+const SUGG=['Compléments alimentaires','Étirements','2 L d’eau','Marcher 30 min','Lire 20 min','Méditer','Se coucher avant 23 h'];
+const JOURS=['D','L','M','M','J','V','S'];
+
+function dkey(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function addDays(d,n){const x=new Date(d);x.setDate(x.getDate()+n);return x}
+function today(){const d=new Date();d.setHours(12,0,0,0);return d}
+function uid(){return Math.random().toString(36).slice(2,9)}
+
+/* ---- données ---- */
+function seed(){
+  const habits=[
+    {id:'h1',name:'Compléments alimentaires',color:COLORS[0]},
+    {id:'h2',name:'Étirements',color:COLORS[1]},
+    {id:'h3',name:'2 L d’eau',color:COLORS[2]},
+    {id:'h4',name:'Marcher 30 min',color:COLORS[3]}
+  ];
+  const log={},pat=[[1,1,0,1],[1,0,1,1],[1,1,1,0],[0,1,1,1],[1,1,0,1],[1,0,1,1]];
+  pat.forEach((p,i)=>{const k=dkey(addDays(today(),-(6-i)));log[k]=habits.filter((_,j)=>p[j]).map(h=>h.id)});
+  return {habits,log,example:true};
+}
+let S;
+try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+if(!S||!Array.isArray(S.habits))S=seed();
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+
+function isDone(id,k){return (S.log[k]||[]).includes(id)}
+function toggle(id,k){
+  const arr=S.log[k]||(S.log[k]=[]);
+  const i=arr.indexOf(id); if(i>=0)arr.splice(i,1); else arr.push(id);
+  if(!arr.length)delete S.log[k];
+  save();
+}
+function streak(id){
+  let d=today(),n=0;
+  if(!isDone(id,dkey(d)))d=addDays(d,-1);
+  while(isDone(id,dkey(d))){n++;d=addDays(d,-1)}
+  return n;
+}
+function todayStats(){
+  const k=dkey(today());const t=S.habits.length;
+  const n=S.habits.filter(h=>isDone(h.id,k)).length;
+  return {n,t};
+}
+
+/* ---- vues ---- */
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ICON={
+  agenda:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="4" y="5" width="16" height="15" rx="3"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>',
+  habitudes:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg>',
+  repas:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 13h16a8 8 0 0 1-16 0Z"/><path d="M9 9c0-2 2-2 2-4M14 9c0-2 2-2 2-4"/></svg>',
+  cours:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5C6 4.5 9 4.5 12 6c3-1.5 6-1.5 8-.5V19c-2-1-5-1-8 .5-3-1.5-6-1.5-8-.5Z"/><path d="M12 6v13.5"/></svg>'
+};
+const check='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 12.5 4 4 8-9"/></svg>';
+
+function ring(n,t){
+  const r=34,c=2*Math.PI*r,p=t?n/t:0;
+  return `<svg class="ring" viewBox="0 0 84 84" role="img" aria-label="${n} sur ${t} habitudes faites"><circle class="bg" cx="42" cy="42" r="${r}"/><circle class="fg" cx="42" cy="42" r="${r}" stroke-dasharray="${c}" stroke-dashoffset="${c*(1-p)}" transform="rotate(-90 42 42)"/><text x="42" y="50" text-anchor="middle">${n}/${t}</text></svg>`;
+}
+
+function viewAccueil(){
+  const d=new Date();
+  const h=d.getHours();
+  const salut=h<5?'Bonne nuit':h<12?'Bonjour':h<18?'Bel après-midi':'Bonsoir';
+  const date=d.toLocaleDateString('fr-CH',{weekday:'long',day:'numeric',month:'long'});
+  const {n,t}=todayStats();
+  const msg=!t?'Ajoute ta première habitude.':n===t?'Tout est fait. Bravo.':`Encore ${t-n} à cocher aujourd’hui.`;
+  return `
+  <section class="hero">
+    <span class="eyebrow">${esc(date)}</span>
+    <h1>${salut} <em>Line</em>.</h1>
+  </section>
+  <section class="section">
+    <a href="#habitudes" class="card today" style="text-decoration:none">
+      ${ring(n,t)}
+      <div style="display:grid;gap:4px;min-width:0">
+        <span class="eyebrow">Tes habitudes du jour</span>
+        <h3>${msg}</h3>
+      </div>
+    </a>
+    <div class="grid2">
+      ${tile('agenda','Agenda','Google Agenda et tes périodes colorées.','Étape 2')}
+      ${tile('habitudes','Habitudes','Une case par jour, tes séries.','Prêt',true)}
+      ${tile('repas','Repas','Menus selon ton cycle, la saison, ton frigo.','Étape 4')}
+      ${tile('cours','Cours','Une section par matière, ta progression.','Étape 3')}
+    </div>
+  </section>`;
+}
+function tile(r,t,d,tag,ok){
+  return `<a class="tile" href="#${r}"><span class="ic">${ICON[r]}</span><span class="tag ${ok?'ok':''}">${tag}</span><h3>${t}</h3><p class="muted" style="font-size:.85rem">${d}</p></a>`;
+}
+
+function viewHabitudes(){
+  const t=today();
+  const days=[...Array(7)].map((_,i)=>addDays(t,i-6));
+  const items=S.habits.map(h=>{
+    const k=dkey(t), done=isDone(h.id,k), st=streak(h.id);
+    const week=days.map(d=>{
+      const dk=dkey(d),on=isDone(h.id,dk),isT=dk===k;
+      return `<button class="day ${on?'on':''} ${isT?'is-today':''}" data-act="day" data-id="${h.id}" data-k="${dk}" aria-pressed="${on}" aria-label="${d.toLocaleDateString('fr-CH',{weekday:'long',day:'numeric'})}"><small>${JOURS[d.getDay()]}</small><span>${d.getDate()}</span></button>`;
+    }).join('');
+    const delUi = editing===h.id
+      ? `<div class="confirm"><span class="muted">Supprimer ?</span><button class="btn small" data-act="del-yes" data-id="${h.id}">Oui</button><button class="btn small ghost" data-act="del-no">Non</button></div>`
+      : (editMode?`<button class="del" data-act="del" data-id="${h.id}">Supprimer</button>`:'');
+    return `<article class="habit" style="--hc:${h.color}">
+      <div class="row">
+        <div style="flex:1;min-width:0;display:grid;gap:2px">
+          <span class="name">${esc(h.name)}</span>
+          <span class="streak">${st?`Série de ${st} jour${st>1?'s':''}`:'Pas encore de série'}</span>
+        </div>
+        ${delUi}
+        <button class="check" data-act="today" data-id="${h.id}" aria-pressed="${done}" aria-label="${done?'Décocher':'Cocher'} ${esc(h.name)} pour aujourd’hui">${check}</button>
+      </div>
+      <div class="week">${week}</div>
+    </article>`;
+  }).join('');
+
+  // 5 dernières semaines
+  const start=addDays(t,-34);
+  let heat='';
+  for(let i=0;i<35;i++){
+    const d=addDays(start,i),dk=dkey(d);
+    const n=S.habits.filter(h=>isDone(h.id,dk)).length,p=S.habits.length?n/S.habits.length:0;
+    heat+=`<i title="${d.toLocaleDateString('fr-CH')} : ${n}/${S.habits.length}" style="background:${p?`color-mix(in srgb,var(--sage) ${Math.round(25+p*75)}%,var(--surface))`:'var(--surface)'}"></i>`;
+  }
+  return `
+  <section class="hero">
+    <span class="eyebrow">Partie 3</span>
+    <div class="hab-head"><h2>Mes <em>habitudes</em></h2>
+      <div style="display:flex;gap:8px">
+        ${S.habits.length?`<button class="btn small ghost" data-act="edit">${editMode?'Terminé':'Modifier'}</button>`:''}
+        <button class="btn small" data-act="add">Ajouter</button>
+      </div>
+    </div>
+    ${S.example?'<p class="ex">Ces 4 habitudes sont des exemples : garde-les, supprime-les ou ajoute les tiennes.</p>':''}
+  </section>
+  <section class="section">
+    ${S.habits.length?`<div class="list">${items}</div>`:`<div class="card empty"><h3>Aucune habitude pour l’instant</h3><p class="muted">Ajoute par exemple « 2 L d’eau » ou « Étirements ».</p><button class="btn" data-act="add">Ajouter une habitude</button></div>`}
+    ${S.habits.length?`<div class="card" style="display:grid;gap:12px">
+      <div><span class="eyebrow">5 dernières semaines</span><h3>Ta régularité</h3></div>
+      <div class="heat">${heat}</div>
+      <div class="heat-legend"><span>il y a 5 semaines</span><span>aujourd’hui</span></div>
+    </div>`:''}
+  </section>`;
+}
+
+function viewAgenda(){
+  // Maquette : mois en cours, avec une période d'exemple
+  const now=new Date(),y=now.getFullYear(),m=now.getMonth();
+  const first=new Date(y,m,1),len=new Date(y,m+1,0).getDate();
+  const off=(first.getDay()+6)%7;
+  const tripS=Math.min(len-4,Math.max(1,now.getDate()+3)),tripE=tripS+4;
+  let cells=['L','M','M','J','V','S','D'].map(x=>`<b>${x}</b>`).join('')+'<span></span>'.repeat(off);
+  for(let d=1;d<=len;d++){
+    const inT=d>=tripS&&d<=tripE;
+    const cls=[inT?'trip':'',inT?(d===tripS?'s':d===tripE?'e':'m'):'',d===now.getDate()?'t':''].join(' ');
+    cells+=`<span class="${cls}">${d}</span>`;
+  }
+  return `
+  <section class="hero"><span class="eyebrow">Partie 1 · Étape 2</span><h2>Mon <em>agenda</em></h2></section>
+  <section class="section">
+    <div class="card soon">
+      <h3>${now.toLocaleDateString('fr-CH',{month:'long',year:'numeric'})}</h3>
+      <div class="cal">${cells}</div>
+      <div class="legend"><i></i>Lisbonne, du ${tripS} au ${tripE}<span class="ex">(exemple)</span></div>
+    </div>
+    <div class="card soon">
+      <span class="tag">Bientôt</span>
+      <ul>
+        <li>Tes événements Google Agenda, que tu peux ajouter et modifier d’ici.</li>
+        <li>Des périodes de plusieurs jours avec leur couleur de fond.</li>
+        <li>Vue mois et vue semaine, pensées pour le téléphone.</li>
+      </ul>
+    </div>
+  </section>`;
+}
+function viewRepas(){
+  return `
+  <section class="hero"><span class="eyebrow">Partie 2 · Étape 4</span><h2>Repas &amp; <em>courses</em></h2></section>
+  <section class="section">
+    <div class="card soon">
+      <div><span class="eyebrow">Phase folliculaire · automne</span><h3>Aujourd’hui <span class="ex">(exemple)</span></h3></div>
+      <div>
+        <div class="meal"><span>Petit-déjeuner</span><span class="muted">Porridge, poire, noix</span></div>
+        <div class="meal"><span>Midi</span><span class="muted">Lentilles, courge rôtie</span></div>
+        <div class="meal"><span>Soir</span><span class="muted">Saumon, chou kale, riz</span></div>
+      </div>
+      <div class="course"><div class="top"><span>Protéines</span><span class="muted">82 / 100 g</span></div><div class="bar"><i style="width:82%"></i></div></div>
+    </div>
+    <div class="card soon">
+      <span class="tag">Bientôt</span>
+      <ul>
+        <li>Menus de la semaine selon ton cycle, la saison et ton frigo.</li>
+        <li>Liste de courses générée toute seule.</li>
+        <li>Tes macros du jour et le suivi de tes compléments.</li>
+      </ul>
+    </div>
+  </section>`;
+}
+function viewCours(){
+  const ex=[['Anatomie',65],['Statistiques',40],['Anglais',80]];
+  return `
+  <section class="hero"><span class="eyebrow">Partie 4 · Étape 3</span><h2>Mes <em>cours</em></h2></section>
+  <section class="section">
+    <div class="card soon">
+      <span class="ex">Matières d’exemple</span>
+      ${ex.map(([n,p])=>`<div class="course"><div class="top"><span>${n}</span><span class="muted">${p} %</span></div><div class="bar"><i style="width:${p}%"></i></div></div>`).join('')}
+    </div>
+    <div class="card soon">
+      <span class="tag">Bientôt</span>
+      <ul>
+        <li>Une section par matière avec sa to-do et son récap.</li>
+        <li>Ta progression, chapitre par chapitre.</li>
+      </ul>
+    </div>
+  </section>`;
+}
+
+/* ---- navigation ---- */
+let editMode=false,editing=null;
+const VIEWS={accueil:viewAccueil,habitudes:viewHabitudes,agenda:viewAgenda,repas:viewRepas,cours:viewCours};
+function route(){return VIEWS[location.hash.slice(1)]?location.hash.slice(1):'accueil'}
+function render(){
+  const r=route();
+  $('#view').innerHTML=VIEWS[r]();
+  document.querySelectorAll('nav.tabs a').forEach(a=>{if(a.dataset.r===r)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});
+}
+addEventListener('hashchange',()=>{editMode=false;editing=null;render();scrollTo(0,0)});
+
+$('#view').addEventListener('click',e=>{
+  const b=e.target.closest('[data-act]');if(!b)return;
+  const {act,id,k}=b.dataset;
+  if(act==='today'){toggle(id,dkey(today()));S.example=false;save()}
+  else if(act==='day'){toggle(id,k)}
+  else if(act==='add'){openSheet();return}
+  else if(act==='edit'){editMode=!editMode;editing=null}
+  else if(act==='del'){editing=id}
+  else if(act==='del-no'){editing=null}
+  else if(act==='del-yes'){S.habits=S.habits.filter(h=>h.id!==id);Object.keys(S.log).forEach(k=>{S.log[k]=S.log[k].filter(x=>x!==id);if(!S.log[k].length)delete S.log[k]});editing=null;S.example=false;save()}
+  render();
+});
+
+/* ---- ajout d'une habitude ---- */
+function openSheet(){
+  const el=$('#sheet');let color=COLORS[S.habits.length%COLORS.length];
+  const have=new Set(S.habits.map(h=>h.name));
+  el.innerHTML=`<div class="sheet-bg" data-close><form class="sheet" id="addForm">
+    <h2>Nouvelle <em>habitude</em></h2>
+    <div class="field"><label for="hname">Nom</label><input id="hname" maxlength="60" placeholder="Ex. 2 L d’eau" autocomplete="off" required></div>
+    <div class="chips">${SUGG.filter(s=>!have.has(s)).map(s=>`<button type="button" data-s="${esc(s)}">${esc(s)}</button>`).join('')}</div>
+    <div class="field"><label>Couleur</label><div class="swatches">${COLORS.map(c=>`<button type="button" style="--c:${c}" data-c="${c}" aria-label="Couleur" aria-pressed="${c===color}"></button>`).join('')}</div></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end"><button type="button" class="btn ghost" data-close>Annuler</button><button class="btn" type="submit">Ajouter</button></div>
+  </form></div>`;
+  el.hidden=false;
+  const f=$('#addForm');
+  setTimeout(()=>$('#hname').focus(),50);
+  el.onclick=e=>{
+    if(e.target.matches('[data-close]')){el.hidden=true;return}
+    const s=e.target.closest('[data-s]');if(s){$('#hname').value=s.dataset.s;return}
+    const c=e.target.closest('[data-c]');if(c){color=c.dataset.c;f.querySelectorAll('[data-c]').forEach(x=>x.setAttribute('aria-pressed',x===c))}
+  };
+  f.onsubmit=e=>{
+    e.preventDefault();const name=$('#hname').value.trim();if(!name)return;
+    S.habits.push({id:uid(),name,color});S.example=false;save();el.hidden=true;
+    if(route()!=='habitudes')location.hash='habitudes';else render();
+  };
+}
+
+/* ---- son 40 Hz : une note douce modulée 40 fois par seconde ---- */
+let ctx,nodes=null;
+$('#focus').addEventListener('click',()=>{
+  const b=$('#focus');
+  if(nodes){nodes.g.gain.setTargetAtTime(0,ctx.currentTime,.15);const n=nodes;setTimeout(()=>{n.o.stop();n.l.stop()},600);nodes=null;b.setAttribute('aria-pressed','false');return}
+  try{
+    ctx=ctx||new (window.AudioContext||window.webkitAudioContext)();ctx.resume();
+    const o=ctx.createOscillator(),l=ctx.createOscillator(),lg=ctx.createGain(),am=ctx.createGain(),g=ctx.createGain();
+    o.frequency.value=220;l.frequency.value=40;lg.gain.value=.5;am.gain.value=.5;
+    l.connect(lg).connect(am.gain);o.connect(am).connect(g).connect(ctx.destination);
+    g.gain.value=0;g.gain.setTargetAtTime(.08,ctx.currentTime,.3);
+    o.start();l.start();nodes={o,l,g};b.setAttribute('aria-pressed','true');
+  }catch(e){}
+});
+
+render();
+if('serviceWorker' in navigator && location.protocol==='https:' && !/claude|anthropic/.test(location.hostname)){
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+})();
+</script>
+
+</body>
+</html>
