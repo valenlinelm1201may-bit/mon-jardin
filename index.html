@@ -156,21 +156,39 @@ p{margin:0}
 .ev:last-child{border-bottom:none}
 .ev time{font-variant-numeric:tabular-nums;color:var(--muted);font-size:.82rem;padding-top:2px}
 
+.cal small.mo{position:absolute;top:3px;font-size:.55rem;color:var(--muted);text-transform:uppercase}
+.cal button.sel small.mo{color:inherit}
+.hero .seg{justify-self:start;margin-top:6px;flex-wrap:wrap}
+.daycard{padding:14px 16px;display:grid;gap:4px}
+.daycard[style]{background:color-mix(in srgb,var(--gc) 18%,var(--card-solid))}
+.daycard.is-today{box-shadow:inset 0 0 0 1.5px var(--olive)}
+.daycard h3{font-size:1.15rem}
+.gtag{font-size:.7rem;padding:2px 9px;border-radius:99px;background:color-mix(in srgb,var(--gc) 45%,transparent);margin-right:auto}
 /* to-do eisenhower */
 .matrix{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .quad{border-radius:22px;padding:14px 12px;display:grid;gap:8px;align-content:start;min-height:150px;background:color-mix(in srgb,var(--qc) 12%,var(--card-solid));border:1px solid color-mix(in srgb,var(--qc) 35%,var(--line));min-width:0}
 .quad h3{font-size:1.15rem}
 .quad .qh{display:flex;justify-content:space-between;align-items:baseline;gap:6px}
 .quad .qh small{font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
-.axis{display:flex;justify-content:space-between;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding-inline:6px}
 .task{display:flex;gap:8px;align-items:flex-start;font-size:.88rem;line-height:1.3}
 .task .check{--hc:var(--qc)}
 .task .tt{flex:1;min-width:0;overflow-wrap:anywhere;background:none;border:none;text-align:left;padding:3px 0}
 .task .tt small{display:block;color:var(--muted);font-size:.72rem;margin-top:2px}
 .task.done .tt{text-decoration:line-through;color:var(--muted)}
 .quad .add{border:1px dashed color-mix(in srgb,var(--qc) 50%,var(--line));background:none;border-radius:12px;padding:6px;font-size:.8rem;color:var(--muted)}
-@media (max-width:420px){.matrix{gap:8px}.quad{padding:12px 10px}}
+@media (max-width:420px){.eis{gap:6px;grid-template-columns:22px 1fr 1fr}.quad{padding:12px 9px}}
 
+/* matrice : axes explicites */
+.eis{display:grid;grid-template-columns:26px 1fr 1fr;gap:8px}
+.col-h{text-align:center;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:var(--ink);padding:4px 0;border-bottom:2px solid var(--line)}
+.row-h{display:flex;align-items:center;justify-content:center;border-right:2px solid var(--line)}
+.row-h span{writing-mode:vertical-rl;transform:rotate(180deg);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;font-weight:600;white-space:nowrap}
+.quad .qs{font-size:.72rem;color:var(--muted);margin-top:-6px}
+.inbox-item{display:grid;gap:8px;padding:8px 10px;border-radius:16px;background:var(--surface)}
+.place{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.place button{border:1px solid color-mix(in srgb,var(--qc) 50%,var(--line));background:color-mix(in srgb,var(--qc) 16%,var(--card-solid));border-radius:14px;padding:8px;text-align:left;display:grid;gap:1px}
+.place button b{font-family:var(--serif);font-size:1.1rem;font-weight:600}
+.place button span{font-size:.7rem;color:var(--muted)}
 /* cours */
 .timeline{position:relative;height:74px;margin-top:4px}
 .tl-track{position:absolute;left:0;right:0;top:34px;height:8px;border-radius:99px;background:var(--surface);overflow:hidden}
@@ -225,6 +243,29 @@ p{margin:0}
 .shop-li.done span{text-decoration:line-through;color:var(--muted)}
 .note{font-size:.8rem;color:var(--muted);background:var(--surface);border-radius:14px;padding:10px 12px}
 
+/* jeu */
+.tile.wide{grid-template-columns:auto 1fr;align-items:center;gap:14px}
+.board{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:8px;border-radius:22px;background:var(--surface);border:1px solid var(--line);touch-action:none;user-select:none;-webkit-user-select:none;max-width:440px;width:100%;justify-self:center}
+.cell{aspect-ratio:1;border-radius:14px;background:color-mix(in srgb,var(--card-solid) 60%,transparent);position:relative;max-width:100%}
+.cell .tile{position:absolute;inset:0;border-radius:14px;display:grid;place-items:center;font-family:var(--serif);font-weight:600;font-size:clamp(1.3rem,7vw,2.1rem);font-variant-numeric:lining-nums}
+.cell .tile.big{font-size:clamp(1.05rem,5.5vw,1.6rem)}
+.cell .tile.pop{animation:pop .18s ease}
+@keyframes pop{from{transform:scale(.6);opacity:.4}}
+.board-msg{position:absolute;inset:0;border-radius:22px;background:color-mix(in srgb,var(--bg) 82%,transparent);display:grid;place-content:center;justify-items:center;gap:12px;text-align:center}
+/* pop-up métro */
+.metro{position:fixed;z-index:50;left:50%;top:calc(env(safe-area-inset-top,0px) + 12px);transform:translate(-50%,-140%);transition:transform .4s ease;width:min(92vw,420px);background:var(--card-solid);border:1px solid var(--line);border-radius:22px;box-shadow:0 10px 40px rgba(40,40,30,.18);padding:12px 14px 14px;display:grid;gap:8px;overflow:hidden}
+.metro.in{transform:translate(-50%,0)}
+.mhead{display:flex;align-items:center;gap:8px;font-weight:500;font-size:.9rem}
+.mhead span:nth-child(2){flex:1}
+.mhead button{border:none;background:none;font-size:1.3rem;line-height:1;color:var(--muted);padding:0 4px}
+.mbadge{background:#E2001A;color:#fff;font-weight:700;border-radius:6px;padding:1px 7px;font-size:.8rem}
+.mrow{display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;font-size:.85rem}
+.mst{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mt{display:grid;justify-items:end;line-height:1.1;font-variant-numeric:tabular-nums}
+.mt b{font-size:1rem}
+.mt small{font-size:.68rem;color:var(--muted)}
+.mbar{position:absolute;left:0;bottom:0;height:3px;background:var(--sage);width:100%;animation:mbar 10s linear forwards}
+@keyframes mbar{to{width:0}}
 /* barre d'onglets */
 nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:6px max(6px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(6px,env(safe-area-inset-left,0px))}
 nav.tabs .in{max-width:600px;margin:0 auto;display:grid;grid-template-columns:repeat(6,1fr)}
@@ -326,7 +367,8 @@ function defaults(S){
     {id:uid(),title:'Finir la série 8 de maths',q:1,done:false,ex:true},
     {id:uid(),title:'Planifier les révisions de janvier',q:2,done:false,ex:true},
     {id:uid(),title:'Répondre au mail du groupe de compta',q:3,done:false,ex:true},
-    {id:uid(),title:'Trier les photos du téléphone',q:4,done:false,ex:true}];
+    {id:uid(),title:'Trier les photos du téléphone',q:4,done:false,ex:true},
+    {id:uid(),title:'Acheter un cadeau pour Noël',q:0,done:false,ex:true}];
   S.courses=S.courses||seedCourses();
   S.perso=S.perso||[{id:'p1',name:'Projet perso',kw:[],color:'#9B7C8E',slots:[],progress:0,todos:[],notes:'',perso:true}];
   S.sem=S.sem||{start:'2026-09-14',endCourses:'2026-12-18',examStart:'2027-01-15',examEnd:'2027-02-06'};
@@ -355,7 +397,7 @@ const CHECK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-w
 const chk=(on,act,data,label,sm)=>`<button class="check ${sm?'sm':''}" data-act="${act}" ${data} aria-pressed="${!!on}" aria-label="${esc(label)}">${CHECK}</button>`;
 
 /* ================= Google (Agenda + Tasks) ================= */
-const G={token:null,exp:0,events:{},tasks:null,cals:null,err:''};
+const G={token:null,exp:0,events:{},loading:{},tasks:null,cals:null,err:''};
 const GSCOPE='https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/tasks';
 function gReady(){return G.token&&Date.now()<G.exp}
 function canGoogle(){return !!S.cfg.clientId && location.protocol==='https:' && !/claude\.ai|claudeusercontent|anthropic/.test(location.hostname)}
@@ -398,7 +440,7 @@ async function gTasks(){
   const r=await gf(TASK+'/lists/@default/tasks?showCompleted=true&showHidden=true&maxResults=100');
   G.tasks=(r.items||[]).filter(t=>t.title);return G.tasks;
 }
-function qOfTask(t){const m=/\[Q([1-4])\]/.exec(t.notes||'');return m?+m[1]:(S.qmap[t.id]||2)}
+function qOfTask(t){const m=/\[Q([0-4])\]/.exec(t.notes||'');return m?+m[1]:(S.qmap[t.id]||0)}
 
 /* ================= vues ================= */
 function ring(n,t){
@@ -429,6 +471,7 @@ function viewAccueil(){
       ${tile('repas','Repas',nm?`${nm} repas prévus aujourd’hui.`:'Rien de prévu aujourd’hui.','7 jours',true)}
       ${tile('agenda','Agenda',gReady()?'Connecté à Google Agenda.':'Tes périodes colorées et Google Agenda.',gReady()?'Google':'Mois',true)}
     </div>
+    <a class="tile wide" href="#jeu"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/><path d="M7.5 14v5M5 16.5h5"/></svg></span><div style="min-width:0"><span class="tag ok">Pause</span><h3>Fusion</h3><p class="muted small">${S.game?'Record : '+S.game.best:'Un petit jeu de tuiles pour souffler.'}</p></div></a>
   </section>`;
 }
 function tile(r,t,d,tag,ok){return `<a class="tile" href="#${r}"><span class="ic">${ICON[r]}</span><span class="tag ${ok?'ok':''}">${esc(tag)}</span><h3>${t}</h3><p class="muted small">${esc(d)}</p></a>`}
@@ -456,75 +499,103 @@ function viewHabitudes(){
 }
 
 /* ---- agenda ---- */
-let calMonth=null,calSel=dkey(today());
+let calMonth=null,calSel=dkey(today()),agStart=today();
+const AGV=[['3','3 jours'],['7','7 jours'],['14','2 semaines'],['m','Mois']];
+function evsOn(list,k){return (list||[]).filter(e=>{const s=(e.start.dateTime||e.start.date).slice(0,10),en=e.end.date?dkey(addDays(parseK(e.end.date),-1)):(e.end.dateTime||'').slice(0,10);return k>=s&&k<=en})}
+function evLine(e){return `<div class="ev"><time>${e.start.dateTime?new Date(e.start.dateTime).toLocaleTimeString('fr-CH',{hour:'2-digit',minute:'2-digit'}):'journée'}</time><div style="min-width:0"><div>${esc(e.summary||'(sans titre)')}</div><div class="small muted">${esc(e._cal)}${e.location?' · '+esc(e.location):''}</div></div></div>`}
+function rangeEvents(from,to){const k=dkey(from)+'_'+dkey(to);if(gReady()&&!G.events[k]&&!G.loading[k]){G.loading[k]=1;gEvents(from,to).then(()=>{delete G.loading[k];render()}).catch(e=>{delete G.loading[k];toast(e.message)})}return G.events[k]}
+function groupOn(k){return S.groups.find(g=>k>=g.start&&k<=g.end)}
+function calCell(k,evs,label){
+  const g=groupOn(k),now=dkey(today());
+  const cls=[g?'g':'',g&&k===g.start?'s':'',g&&k===g.end?'e':'',k===now?'t':'',k===calSel?'sel':''].join(' ');
+  return `<button class="${cls}" ${g?`style="--gc:${g.color}"`:''} data-act="csel" data-k="${k}" aria-label="${fmt(parseK(k),{weekday:'long',day:'numeric',month:'long'})}${g?', '+esc(g.name):''}">${label}${evs&&evsOn(evs,k).length?'<i></i>':''}</button>`;
+}
 function viewAgenda(){
-  const now=today();if(!calMonth)calMonth=new Date(now.getFullYear(),now.getMonth(),1,12);
-  const y=calMonth.getFullYear(),m=calMonth.getMonth(),len=new Date(y,m+1,0).getDate(),off=(new Date(y,m,1).getDay()+6)%7;
-  const evDays=new Set();
-  const gk=dkey(new Date(y,m,1))+'_'+dkey(new Date(y,m+1,1));
-  (G.events[gk]||[]).forEach(e=>evDays.add((e.start.dateTime||e.start.date).slice(0,10)));
-  let cells=['L','M','M','J','V','S','D'].map(x=>`<b>${x}</b>`).join('')+'<span></span>'.repeat(off);
-  for(let d=1;d<=len;d++){
-    const k=dkey(new Date(y,m,d,12));
-    const g=S.groups.find(g=>k>=g.start&&k<=g.end);
-    const cls=[g?'g':'',g&&k===g.start?'s':'',g&&k===g.end?'e':'',k===dkey(now)?'t':'',k===calSel?'sel':''].join(' ');
-    cells+=`<button class="${cls}" ${g?`style="--gc:${g.color}"`:''} data-act="csel" data-k="${k}" aria-label="${fmt(parseK(k),{weekday:'long',day:'numeric',month:'long'})}${g?', '+esc(g.name):''}">${d}${evDays.has(k)?'<i></i>':''}</button>`;
+  const v=S.cfg.agView||'m',now=today();
+  const seg=`<div class="seg" role="group" aria-label="Affichage">${AGV.map(([k,l])=>`<button data-act="agview" data-v="${k}" aria-pressed="${v===k}">${l}</button>`).join('')}</div>`;
+  let main='',from,to,title;
+  if(v==='m'||v==='14'){
+    let first,count,lead=0;
+    if(v==='m'){if(!calMonth)calMonth=new Date(now.getFullYear(),now.getMonth(),1,12);first=calMonth;count=new Date(first.getFullYear(),first.getMonth()+1,0).getDate();lead=(first.getDay()+6)%7;title=fmt(first,{month:'long',year:'numeric'})}
+    else{first=addDays(agStart,-((agStart.getDay()+6)%7));count=14;title=`${fmt(first,{day:'numeric',month:'short'})} → ${fmt(addDays(first,13),{day:'numeric',month:'short'})}`}
+    from=new Date(first);from.setHours(0,0,0,0);to=addDays(from,count);
+    const evs=rangeEvents(from,to);
+    let cells=['L','M','M','J','V','S','D'].map(x=>`<b>${x}</b>`).join('')+'<span></span>'.repeat(lead);
+    for(let i=0;i<count;i++){const d=addDays(first,i);cells+=calCell(dkey(d),evs,v==='14'&&(i===0||d.getDate()===1)?`${d.getDate()}<small class="mo">${fmt(d,{month:'short'})}</small>`:d.getDate())}
+    const selEv=gReady()?(evs?(evsOn(evs,calSel).map(evLine).join('')||'<p class="muted small">Rien ce jour-là.</p>'):'<p class="muted small">Chargement…</p>'):googleCta('Connecte Google Agenda pour voir et ajouter tes événements ici.');
+    main=`<div class="card stack"><div class="cal-nav"><button class="icon-btn" data-act="agprev" aria-label="Précédent">‹</button><h3>${title}</h3><button class="icon-btn" data-act="agnext" aria-label="Suivant">›</button></div><div class="cal">${cells}</div></div>
+      <div class="card stack"><div class="head-row"><h3>${fmt(parseK(calSel),{weekday:'long',day:'numeric',month:'long'})}</h3>${gReady()?'<button class="btn small ghost" data-act="evadd">Ajouter</button>':''}</div>${selEv}</div>`;
+  }else{
+    const n=+v;from=new Date(agStart);from.setHours(0,0,0,0);to=addDays(from,n);
+    const evs=rangeEvents(from,to);
+    title=`${fmt(agStart,{day:'numeric',month:'short'})} → ${fmt(addDays(agStart,n-1),{day:'numeric',month:'short'})}`;
+    const days=[...Array(n)].map((_,i)=>{const d=addDays(agStart,i),k=dkey(d),g=groupOn(k);
+      const body=gReady()?(evs?(evsOn(evs,k).map(evLine).join('')||'<p class="muted small">Libre</p>'):'<p class="muted small">Chargement…</p>'):'';
+      return `<div class="card daycard ${k===dkey(now)?'is-today':''}" ${g?`style="--gc:${g.color}"`:''}><div class="head-row"><h3>${fmt(d,{weekday:'long',day:'numeric',month:'short'})}</h3>${g?`<span class="gtag">${esc(g.name)}</span>`:''}${gReady()?`<button class="link" data-act="evadd" data-k="${k}">+ Ajouter</button>`:''}</div>${body}</div>`}).join('');
+    main=`<div class="cal-nav card"><button class="icon-btn" data-act="agprev" aria-label="Précédent">‹</button><h3>${title}</h3><button class="icon-btn" data-act="agnext" aria-label="Suivant">›</button></div>
+      ${gReady()?'':`<div class="card stack">${googleCta('Connecte Google Agenda pour voir tes événements dans chaque jour.')}</div>`}
+      <div class="stack">${days}</div>`;
   }
-  const mg=S.groups.filter(g=>g.end>=dkey(new Date(y,m,1))&&g.start<=dkey(new Date(y,m,len))).sort((a,b)=>a.start.localeCompare(b.start));
+  const yA=dkey(from),yB=dkey(addDays(to,-1));
+  const mg=S.groups.filter(g=>g.end>=yA&&g.start<=yB).sort((a,b)=>a.start.localeCompare(b.start));
   const grp=mg.map(g=>`<div class="grp" style="--gc:${g.color}"><i></i><span>${esc(g.name)} <span class="muted small">· ${fmt(parseK(g.start),{day:'numeric',month:'short'})} → ${fmt(parseK(g.end),{day:'numeric',month:'short'})}</span></span><button class="del" data-act="gdel" data-id="${g.id}">Retirer</button></div>`).join('');
-  const selD=parseK(calSel);
-  let evHtml='';
-  if(gReady()){
-    const list=(G.events[gk]||[]).filter(e=>{const s=(e.start.dateTime||e.start.date).slice(0,10),en=(e.end.date?dkey(addDays(parseK(e.end.date),-1)):(e.end.dateTime||'').slice(0,10));return calSel>=s&&calSel<=en});
-    evHtml=list.length?list.map(e=>`<div class="ev"><time>${e.start.dateTime?new Date(e.start.dateTime).toLocaleTimeString('fr-CH',{hour:'2-digit',minute:'2-digit'}):'journée'}</time><div style="min-width:0"><div>${esc(e.summary||'(sans titre)')}</div><div class="small muted">${esc(e._cal)}${e.location?' · '+esc(e.location):''}</div></div></div>`).join(''):'<p class="muted small">Rien ce jour-là.</p>';
-    if(!G.events[gk])loadMonth(y,m);
-  }
   return `
-  <section class="hero"><div class="head-row"><h2>Mon <em>agenda</em></h2><button class="btn small" data-act="gadd">Nouvelle période</button></div></section>
+  <section class="hero"><div class="head-row"><h2>Mon <em>agenda</em></h2><button class="btn small" data-act="gadd">Nouvelle période</button></div>${seg}</section>
   <section class="section">
-    <div class="card stack">
-      <div class="cal-nav"><button class="icon-btn" data-act="cprev" aria-label="Mois précédent">‹</button><h3>${fmt(calMonth,{month:'long',year:'numeric'})}</h3><button class="icon-btn" data-act="cnext" aria-label="Mois suivant">›</button></div>
-      <div class="cal">${cells}</div>
-      ${grp?`<div class="divider"></div><div class="groups">${grp}</div>`:'<p class="muted small">Ajoute une période (vacances, voyage, révisions) pour colorer plusieurs jours d’un coup.</p>'}
-    </div>
-    <div class="card stack">
-      <div class="head-row"><h3>${fmt(selD,{weekday:'long',day:'numeric',month:'long'})}</h3>${gReady()?'<button class="btn small ghost" data-act="evadd">Ajouter un événement</button>':''}</div>
-      ${gReady()?evHtml:googleCta('Connecte Google Agenda pour voir et ajouter tes événements ici.')}
-    </div>
+    ${main}
+    <div class="card stack"><h3>Périodes</h3>${grp?`<div class="groups">${grp}</div>`:'<p class="muted small">Ajoute une période (vacances, voyage, révisions) pour colorer plusieurs jours d’un coup.</p>'}</div>
   </section>`;
 }
+function agShift(dir){const v=S.cfg.agView||'m';if(v==='m')calMonth=new Date(calMonth.getFullYear(),calMonth.getMonth()+dir,1,12);else agStart=addDays(agStart,dir*(+v))}
 function googleCta(txt){
   if(canGoogle())return `<div class="note">${txt}</div><button class="btn" data-act="gconnect">Se connecter à Google</button>`;
   if(!S.cfg.clientId)return `<div class="note">${txt} Il manque une petite étape de réglage (gratuite) : je t’envoie les instructions.</div>`;
   return `<div class="note">${txt} La connexion Google fonctionne sur ton site en ligne (adresse github.io).</div>`;
 }
-async function loadMonth(y,m){
-  try{await gEvents(new Date(y,m,1),new Date(y,m+1,1));render()}catch(e){toast(e.message)}
-}
 
 /* ---- to-do Eisenhower ---- */
-const QUADS={1:{t:'Faire',s:'urgent · important',c:'var(--q1)'},2:{t:'Planifier',s:'important · pas urgent',c:'var(--q2)'},3:{t:'Expédier',s:'urgent · moins important',c:'var(--q3)'},4:{t:'Plus tard',s:'ni l’un ni l’autre',c:'var(--q4)'}};
+const QUADS={1:{t:'Faire',s:'tout de suite',l:'urgent + important',c:'var(--q1)'},2:{t:'Planifier',s:'bloquer un moment',l:'important, pas urgent',c:'var(--q2)'},3:{t:'Expédier',s:'vite fait ou déléguer',l:'urgent, pas important',c:'var(--q3)'},4:{t:'Plus tard',s:'ou laisser tomber',l:'ni urgent ni important',c:'var(--q4)'}};
 let showDone=false,tasksLoading=false;
 function allTodos(){
   if(gReady()&&G.tasks){return G.tasks.map(t=>({id:t.id,title:t.title,q:qOfTask(t),done:t.status==='completed',due:t.due?t.due.slice(0,10):'',g:true}))}
   return S.todos;
 }
+let placing=null;
 function viewTodo(){
   if(gReady()&&!G.tasks&&!tasksLoading){tasksLoading=true;gTasks().then(()=>{tasksLoading=false;render()}).catch(e=>{tasksLoading=false;toast(e.message)})}
   const list=allTodos();
+  const taskRow=t=>`<div class="task ${t.done?'done':''}">${chk(t.done,'tdone',`data-id="${t.id}"`,(t.done?'Rouvrir ':'Terminer ')+t.title,true)}<button class="tt" data-act="tedit" data-id="${t.id}">${esc(t.title)}${t.due?`<small>${fmt(parseK(t.due),{weekday:'short',day:'numeric',month:'short'})}</small>`:''}</button></div>`;
   const q=n=>{const items=list.filter(t=>t.q===n&&(showDone||!t.done));
-    return `<div class="quad" style="--qc:${QUADS[n].c}"><div class="qh"><h3>${QUADS[n].t}</h3></div><small class="muted" style="font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;margin-top:-6px">${QUADS[n].s}</small>
-      ${items.map(t=>`<div class="task ${t.done?'done':''}">${chk(t.done,'tdone',`data-id="${t.id}"`,(t.done?'Rouvrir ':'Terminer ')+t.title,true)}<button class="tt" data-act="tedit" data-id="${t.id}">${esc(t.title)}${t.due?`<small>${fmt(parseK(t.due),{weekday:'short',day:'numeric',month:'short'})}</small>`:''}</button></div>`).join('')}
+    return `<div class="quad q${n}" style="--qc:${QUADS[n].c}"><h3>${QUADS[n].t}</h3><span class="qs">${QUADS[n].s}</span>
+      ${items.map(taskRow).join('')}
       <button class="add" data-act="tadd" data-q="${n}">+ Ajouter</button></div>`};
+  const inbox=list.filter(t=>!t.q&&!t.done);
+  const inboxHtml=inbox.map(t=>`<div class="inbox-item">
+      <div class="task">${chk(false,'tdone',`data-id="${t.id}"`,'Terminer '+t.title,true)}<button class="tt" data-act="tplace" data-id="${t.id}" aria-expanded="${placing===t.id}">${esc(t.title)}<small>${placing===t.id?'Où la ranger ?':'Touche pour la placer'}</small></button></div>
+      ${placing===t.id?`<div class="place">${[1,2,3,4].map(n=>`<button style="--qc:${QUADS[n].c}" data-act="tput" data-id="${t.id}" data-q="${n}"><b>${QUADS[n].t}</b><span>${QUADS[n].l}</span></button>`).join('')}</div>`:''}
+    </div>`).join('');
   const ex=!gReady()&&S.todos.some(t=>t.ex);
   return `
   <section class="hero"><div class="head-row"><h2>Ma <em>to-do</em></h2><button class="btn small ghost" data-act="tshow">${showDone?'Masquer les faites':'Voir les faites'}</button></div>
-  ${ex?'<p class="ex">Les 4 tâches de départ sont des exemples.</p>':''}</section>
+  ${ex?'<p class="ex">Les tâches de départ sont des exemples.</p>':''}</section>
   <section class="section">
-    <div class="axis"><span>Urgent</span><span>Pas urgent</span></div>
-    <div class="matrix">${q(1)}${q(2)}${q(3)}${q(4)}</div>
+    <div class="card stack">
+      <div class="head-row"><h3>À <em>placer</em></h3><span class="muted small">${inbox.length} en attente</span></div>
+      <form class="inline-add" data-form="tinbox"><input id="tinbox" placeholder="Nouvelle tâche…" autocomplete="off"><button class="btn small">Ajouter</button></form>
+      ${inboxHtml||'<p class="muted small">Tout est rangé. Les nouvelles tâches (et celles qui arrivent de Google) attendent ici.</p>'}
+    </div>
+    <div class="eis">
+      <span></span><div class="col-h">Urgent</div><div class="col-h">Pas urgent</div>
+      <div class="row-h"><span>Important</span></div>${q(1)}${q(2)}
+      <div class="row-h"><span>Pas important</span></div>${q(3)}${q(4)}
+    </div>
     <div class="card stack">${gReady()?`<p class="small muted">Synchronisé avec Google Tasks (visible aussi dans Google Agenda). ${tasksLoading?'Chargement…':''}</p><button class="btn small ghost" data-act="trefresh">Actualiser</button>`:googleCta('Connecte Google pour retrouver ces tâches dans Google Agenda (Google Tasks).')}</div>
   </section>`;
+}
+async function setTaskQ(id,qn){
+  if(gReady()&&G.tasks){const t=G.tasks.find(x=>x.id===id);const notes=((t.notes||'').replace(/\s*\[Q[0-4]\]/g,'')+` [Q${qn}]`).trim();
+    try{const r=await gf(`${TASK}/lists/@default/tasks/${id}`,{method:'PATCH',body:JSON.stringify({notes})});Object.assign(t,r)}catch(e){S.qmap[id]=qn;save();toast(e.message)}}
+  else{const t=S.todos.find(x=>x.id===id);t.q=qn;S.todos.forEach(x=>delete x.ex);save()}
 }
 
 /* ---- cours ---- */
@@ -615,8 +686,38 @@ function viewRepas(){
   </section>`;
 }
 
+/* ---- jeu : Fusion ---- */
+function newGame(){const g={grid:Array(16).fill(0),score:0,best:(S.game&&S.game.best)||0,over:false,won:false};addTile(g);addTile(g);S.game=g;save()}
+function addTile(g){const free=g.grid.map((v,i)=>v?-1:i).filter(i=>i>=0);if(!free.length)return;const i=free[Math.floor(Math.random()*free.length)];g.grid[i]=Math.random()<.9?2:4;g.last=i}
+function lineIdx(dir,r){const out=[];for(let c=0;c<4;c++){const [x,y]=dir===0?[c,r]:dir===1?[3-c,r]:dir===2?[r,c]:[r,3-c];out.push(y*4+x)}return out}
+function moveGame(dir){
+  const g=S.game;if(!g||g.over)return;let moved=false,gain=0;
+  for(let r=0;r<4;r++){const idx=lineIdx(dir,r),vals=idx.map(i=>g.grid[i]).filter(Boolean),out=[];
+    for(let i=0;i<vals.length;i++){if(vals[i]===vals[i+1]){out.push(vals[i]*2);gain+=vals[i]*2;i++}else out.push(vals[i])}
+    while(out.length<4)out.push(0);idx.forEach((ix,k)=>{if(g.grid[ix]!==out[k]){moved=true;g.grid[ix]=out[k]}})}
+  if(!moved)return;g.score+=gain;g.best=Math.max(g.best,g.score);addTile(g);
+  if(!g.won&&g.grid.some(v=>v>=2048))g.won=true;
+  const canMove=g.grid.some(v=>!v)||g.grid.some((v,i)=>(i%4<3&&v===g.grid[i+1])||(i<12&&v===g.grid[i+4]));
+  if(!canMove)g.over=true;save();render();
+}
+function tileStyle(v){const lv=Math.log2(v);const hues=['#E6DCC6','#DCD3B4','#C9CFA8','#B3BE8E','#9AA877','#7D8763','#6B7853','#5A6744','#B5876A','#A6735A','#8F5E48','#4E5939'];const bg=hues[Math.min(lv-1,hues.length-1)];return `background:${bg};color:${lv>=5?'#F6F1E6':'#2E3226'}`}
+function viewJeu(){
+  if(!S.game)newGame();const g=S.game;
+  const cells=g.grid.map((v,i)=>`<div class="cell">${v?`<div class="tile ${i===g.last?'pop':''} ${v>=1024?'big':''}" style="${tileStyle(v)}">${v}</div>`:''}</div>`).join('');
+  return `
+  <section class="hero"><span class="eyebrow">Pause</span><div class="head-row"><h2><em>Fusion</em></h2><button class="btn small" data-act="gnew">Nouvelle partie</button></div>
+  <p class="small muted">Fais glisser les tuiles. Deux tuiles identiques fusionnent. Vise 2048.</p></section>
+  <section class="section">
+    <div class="stats card"><div><b>${g.score}</b><span>score</span></div><div><b>${g.best}</b><span>record</span></div><div><b>${Math.max(...g.grid)}</b><span>plus grande</span></div></div>
+    <div class="board" id="board" aria-label="Plateau de jeu, utilise les flèches ou glisse le doigt">${cells}
+      ${g.over?'<div class="board-msg"><h3>Plus de coups possibles</h3><button class="btn" data-act="gnew">Rejouer</button></div>':''}
+    </div>
+    ${g.won&&!g.over?'<p class="note">Tu as atteint 2048. Tu peux continuer !</p>':''}
+  </section>`;
+}
+
 /* ================= navigation ================= */
-const VIEWS={accueil:viewAccueil,agenda:viewAgenda,todo:viewTodo,habitudes:viewHabitudes,repas:viewRepas,cours:viewCours};
+const VIEWS={jeu:viewJeu,accueil:viewAccueil,agenda:viewAgenda,todo:viewTodo,habitudes:viewHabitudes,repas:viewRepas,cours:viewCours};
 function route(){const h=location.hash.slice(1);return VIEWS[h]?h:'accueil'}
 function render(){
   const r=route(),ae=document.activeElement,keepId=ae&&ae.id&&$('#view').contains(ae)?ae.id:null;
@@ -641,18 +742,21 @@ $('#view').addEventListener('click',async e=>{
     case 'hdel-no':editing=null;break;
     case 'hdel-yes':S.habits=S.habits.filter(h=>h.id!==d.id);Object.keys(S.log).forEach(k=>{S.log[k]=S.log[k].filter(x=>x!==d.id);if(!S.log[k].length)delete S.log[k]});editing=null;S.example=false;save();break;
     // agenda
-    case 'cprev':calMonth=new Date(calMonth.getFullYear(),calMonth.getMonth()-1,1,12);break;
-    case 'cnext':calMonth=new Date(calMonth.getFullYear(),calMonth.getMonth()+1,1,12);break;
+    case 'agprev':agShift(-1);break;
+    case 'agnext':agShift(1);break;
+    case 'agview':S.cfg.agView=d.v;agStart=today();calMonth=null;save();break;
     case 'csel':calSel=d.k;break;
     case 'gadd':openGroupSheet();return;
     case 'gdel':S.groups=S.groups.filter(g=>g.id!==d.id);save();break;
-    case 'evadd':openEventSheet();return;
+    case 'evadd':if(d.k)calSel=d.k;openEventSheet();return;
     case 'gconnect':try{await gConnect();G.events={};G.tasks=null;G.cals=null;toast('Connectée à Google')}catch(err){toast('Connexion annulée')}break;
     // to-do
     case 'tadd':openTaskSheet(null,+d.q);return;
     case 'tedit':openTaskSheet(d.id);return;
     case 'tdone':await toggleTask(d.id);break;
     case 'tshow':showDone=!showDone;break;
+    case 'tplace':placing=placing===d.id?null:d.id;break;
+    case 'tput':placing=null;await setTaskQ(d.id,+d.q);break;
     case 'trefresh':G.tasks=null;break;
     // cours
     case 'copen':openCourse=d.id;scrollTo(0,0);break;
@@ -664,6 +768,7 @@ $('#view').addEventListener('click',async e=>{
     case 'pdel':S.perso=S.perso.filter(x=>x.id!==d.id);openCourse=null;save();break;
     // repas
     case 'mday':mealDay=d.k;break;
+    case 'gnew':newGame();break;
     case 'medit':openMealSheet(d.s);return;
     case 'meaten':{const x=S.meals[mealDay][d.s];x.eaten=!x.eaten;save();break}
     case 'shopchk':S.shop.checked[d.key]=!S.shop.checked[d.key];if(!S.shop.checked[d.key])delete S.shop.checked[d.key];save();break;
@@ -682,6 +787,7 @@ $('#view').addEventListener('input',e=>{
 $('#view').addEventListener('submit',e=>{
   const f=e.target;e.preventDefault();
   if(f.dataset.form==='ctadd'){const i=f.querySelector('input'),v=i.value.trim();if(!v)return;findCourse(f.dataset.id).todos.push({id:uid(),title:v,done:false});save();render();setTimeout(()=>{const n=document.getElementById(i.id);n&&n.focus()},0)}
+  if(f.dataset.form==='tinbox'){const v=$('#tinbox').value.trim();if(!v)return;addTask(v,0).then(()=>{render();setTimeout(()=>{const n=$('#tinbox');n&&n.focus()},0)})}
   if(f.dataset.form==='shopadd'){const v=$('#shopin').value.trim();if(!v)return;S.shop.manual.push({id:uid(),t:v,done:false});save();render();setTimeout(()=>$('#shopin').focus(),0)}
 });
 function findCourse(id){return [...S.courses,...S.perso].find(x=>x.id===id)}
@@ -735,7 +841,7 @@ function openTaskSheet(id,q){
   let cq=t.q;
   sheet(`<h2>${id?'Modifier la':'Nouvelle'} <em>tâche</em></h2>
     <div class="field"><label for="tt">Tâche</label><input id="tt" value="${esc(t.title)}" autocomplete="off"></div>
-    <div class="field"><span class="lbl">Où la ranger</span><div class="chips">${[1,2,3,4].map(n=>`<button type="button" data-q="${n}" aria-pressed="${n===cq}">${QUADS[n].t}</button>`).join('')}</div></div>
+    <div class="field"><span class="lbl">Où la ranger</span><div class="chips">${[0,1,2,3,4].map(n=>`<button type="button" data-q="${n}" aria-pressed="${n===cq}">${n?QUADS[n].t:'À placer'}</button>`).join('')}</div></div>
     <div class="field"><label for="td">Échéance (facultatif)</label><input type="date" id="td" value="${t.due||''}"></div>
     ${closeBtns(id?'Enregistrer':'Ajouter',id?'<button type="button" class="del" data-del style="margin-right:auto">Supprimer</button>':'')}`,
   async f=>{const title=$('#tt').value.trim(),due=$('#td').value;if(!title)return false;
@@ -748,6 +854,10 @@ function openTaskSheet(id,q){
     }},
   async (e,f)=>{const b=e.target.closest('[data-q]');if(b){cq=+b.dataset.q;f.querySelectorAll('[data-q]').forEach(x=>x.setAttribute('aria-pressed',x===b))}
     if(e.target.closest('[data-del]')){if(gReady()&&G.tasks){try{await gf(`${TASK}/lists/@default/tasks/${id}`,{method:'DELETE'});G.tasks=G.tasks.filter(x=>x.id!==id)}catch(err){toast(err.message);return}}else{S.todos=S.todos.filter(x=>x.id!==id);save()}$('#sheet').hidden=true;render()}});
+}
+async function addTask(title,qn,due){
+  if(gReady()&&G.tasks){try{const r=await gf(`${TASK}/lists/@default/tasks`,{method:'POST',body:JSON.stringify({title,notes:`[Q${qn}]`,due:due?due+'T00:00:00.000Z':null})});G.tasks.unshift(r)}catch(e){toast(e.message)}}
+  else{S.todos.forEach(x=>delete x.ex);S.todos.push({id:uid(),title,q:qn,due:due||'',done:false});save()}
 }
 async function toggleTask(id){
   if(gReady()&&G.tasks){const t=G.tasks.find(x=>x.id===id);const st=t.status==='completed'?'needsAction':'completed';
@@ -871,6 +981,35 @@ $('#focus').addEventListener('click',()=>{try{A.on?stopSound():startSound()}catc
 $('#ambience').addEventListener('click',e=>{const b=e.target.closest('[data-amb]');if(!b)return;S.cfg.amb=b.dataset.amb;save();if(A.on){stopSound();setTimeout(()=>{startSound();syncSoundUi()},50)}syncSoundUi()});
 $('#vol').addEventListener('input',e=>{S.cfg.vol=+e.target.value;save();if(A.on)A.master.gain.setTargetAtTime(S.cfg.vol/100*.6,A.ctx.currentTime,.2)});
 
+let tStart=null;
+$('#view').addEventListener('touchstart',e=>{if(!e.target.closest('#board'))return;const t=e.touches[0];tStart=[t.clientX,t.clientY]},{passive:true});
+$('#view').addEventListener('touchend',e=>{if(!tStart)return;const t=e.changedTouches[0],dx=t.clientX-tStart[0],dy=t.clientY-tStart[1];tStart=null;if(Math.max(Math.abs(dx),Math.abs(dy))<25)return;moveGame(Math.abs(dx)>Math.abs(dy)?(dx<0?0:1):(dy<0?2:3))});
+addEventListener('keydown',e=>{if(route()!=='jeu'||e.target.closest('input,textarea'))return;const m={ArrowLeft:0,ArrowRight:1,ArrowUp:2,ArrowDown:3}[e.key];if(m!=null){e.preventDefault();moveGame(m)}});
+
+/* ================= pop-up métro M1 ================= */
+async function metroPopup(){
+  const API='https://transport.opendata.ch/v1/stationboard';
+  async function board(names){for(const n of names){try{const r=await fetch(`${API}?station=${encodeURIComponent(n)}&limit=40`);if(!r.ok)continue;const j=await r.json();
+    const m=(j.stationboard||[]).filter(x=>/^M/i.test(x.category||'')&&String(x.number||'').replace(/^M/i,'')==='1');if(m.length)return m}catch(e){}}return []}
+  const [ren,sor]=await Promise.all([board(['Renens VD, gare','Renens VD']),board(['Lausanne, UNIL-Sorge','UNIL-Sorge','Lausanne, Sorge'])]);
+  if(!ren.length&&!sor.length)return;
+  const now=Date.now();
+  const dep=x=>{const t=x.stop.departureTimestamp?x.stop.departureTimestamp*1000:Date.parse(String(x.stop.departure).replace(/([+-]\d\d)(\d\d)$/,'$1:$2')),dl=+x.stop.delay||0;return {t:t+dl*60000,dl}};
+  const fmtD=x=>{const d=dep(x),min=Math.max(0,Math.round((d.t-now)/60000));return `<b>${new Date(d.t).toLocaleTimeString('fr-CH',{hour:'2-digit',minute:'2-digit'})}</b><small>${min?'dans '+min+' min':'maintenant'}${d.dl?' · +'+d.dl:''}</small>`};
+  const next=(arr,n)=>arr.filter(x=>dep(x).t>=now-30000).slice(0,n);
+  const dest=s=>String(s||'').replace(/^Lausanne,\s*/,'').replace(/^Renens VD,\s*/,'Renens ');
+  let rows='';
+  const r2=next(ren,2);if(r2.length)rows+=`<div class="mrow"><span class="mst">Renens → ${esc(dest(r2[0].to))}</span>${r2.map(x=>`<span class="mt">${fmtD(x)}</span>`).join('')}</div>`;
+  const dirs={};next(sor,12).forEach(x=>{(dirs[x.to]=dirs[x.to]||[]).push(x)});
+  Object.keys(dirs).slice(0,2).forEach(to=>{rows+=`<div class="mrow"><span class="mst">Sorge → ${esc(dest(to))}</span>${dirs[to].slice(0,2).map(x=>`<span class="mt">${fmtD(x)}</span>`).join('')}</div>`});
+  if(!rows)return;
+  const el=document.createElement('div');el.className='metro';el.setAttribute('role','status');
+  el.innerHTML=`<div class="mhead"><span class="mbadge">M1</span><span>Prochains métros</span><button aria-label="Fermer">×</button></div>${rows}<i class="mbar"></i>`;
+  document.body.appendChild(el);requestAnimationFrame(()=>el.classList.add('in'));
+  const close=()=>{el.classList.remove('in');setTimeout(()=>el.remove(),400)};
+  el.querySelector('button').onclick=close;setTimeout(close,10000);
+}
+metroPopup();
 render();syncSoundUi();
 if('serviceWorker' in navigator&&location.protocol==='https:'&&/github\.io$/.test(location.hostname)){navigator.serviceWorker.register('sw.js').catch(()=>{})}
 })();
