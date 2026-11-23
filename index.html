@@ -164,6 +164,28 @@ p{margin:0}
 .daycard.is-today{box-shadow:inset 0 0 0 1.5px var(--olive)}
 .daycard h3{font-size:1.15rem}
 .gtag{font-size:.7rem;padding:2px 9px;border-radius:99px;background:color-mix(in srgb,var(--gc) 45%,transparent);margin-right:auto}
+.hgrid-card{padding:12px 8px 12px 4px}
+.hg-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.hg{display:grid;grid-template-columns:44px repeat(var(--n),minmax(0,1fr));column-gap:3px;row-gap:10px}
+.hg.n7{min-width:640px}
+.hg-corner{position:sticky;left:0;background:var(--card-solid);z-index:3}
+.hg-head{display:grid;justify-items:center;gap:2px;padding-bottom:6px;font-size:.7rem;color:var(--muted);min-width:0}
+.hg-head b{font-family:var(--serif);font-size:1.25rem;font-weight:600;color:var(--ink);line-height:1;font-variant-numeric:lining-nums}
+.hg-head.is-today b{color:var(--on-olive);background:var(--olive);border-radius:50%;width:30px;height:30px;display:grid;place-items:center}
+.hg-head em{font-style:normal;font-size:.66rem;padding:1px 7px;border-radius:99px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hg-head .gtag{background:color-mix(in srgb,var(--gc) 45%,transparent);margin:0}
+.hg-head .allday{background:var(--surface);color:var(--ink)}
+.hg-ticks{position:sticky;left:0;background:var(--card-solid);z-index:2}
+.hg-ticks span{position:absolute;right:6px;font-size:.62rem;color:var(--muted);transform:translateY(-50%)}
+.hg-col{position:relative;cursor:pointer;min-width:0}
+.hg-col.grp{background:color-mix(in srgb,var(--gc) 10%,transparent);border-radius:8px}
+.hg-line{position:absolute;left:0;right:0;border-top:1px solid var(--line)}
+.hg-ev{position:absolute;border-radius:9px;padding:3px 6px;background:color-mix(in srgb,var(--c) 24%,var(--card-solid));border-left:3px solid var(--c);font-size:.72rem;line-height:1.2;overflow:hidden;cursor:default}
+.hg-ev b{display:block;font-weight:500;overflow-wrap:normal;hyphens:auto}
+.hg-ev small{display:block;color:var(--muted);font-size:.66rem;margin-top:1px}
+.n7 .hg-ev{font-size:.62rem;padding:2px 3px;border-left-width:2px}
+.hg-now{position:absolute;left:-3px;right:0;height:2px;background:var(--clay);z-index:2;pointer-events:none}
+.hg-now::before{content:"";position:absolute;left:-3px;top:-4px;width:10px;height:10px;border-radius:50%;background:var(--clay)}
 /* to-do eisenhower */
 .matrix{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .quad{border-radius:22px;padding:14px 12px;display:grid;gap:8px;align-content:start;min-height:150px;background:color-mix(in srgb,var(--qc) 12%,var(--card-solid));border:1px solid color-mix(in srgb,var(--qc) 35%,var(--line));min-width:0}
@@ -500,7 +522,7 @@ function viewHabitudes(){
 
 /* ---- agenda ---- */
 let calMonth=null,calSel=dkey(today()),agStart=today();
-const AGV=[['3','3 jours'],['7','7 jours'],['14','2 semaines'],['m','Mois']];
+const AGV=[['1','1 jour'],['3','3 jours'],['7','7 jours'],['14','2 semaines'],['m','Mois']];
 function evsOn(list,k){return (list||[]).filter(e=>{const s=(e.start.dateTime||e.start.date).slice(0,10),en=e.end.date?dkey(addDays(parseK(e.end.date),-1)):(e.end.dateTime||'').slice(0,10);return k>=s&&k<=en})}
 function evLine(e){return `<div class="ev"><time>${e.start.dateTime?new Date(e.start.dateTime).toLocaleTimeString('fr-CH',{hour:'2-digit',minute:'2-digit'}):'journée'}</time><div style="min-width:0"><div>${esc(e.summary||'(sans titre)')}</div><div class="small muted">${esc(e._cal)}${e.location?' · '+esc(e.location):''}</div></div></div>`}
 function rangeEvents(from,to){const k=dkey(from)+'_'+dkey(to);if(gReady()&&!G.events[k]&&!G.loading[k]){G.loading[k]=1;gEvents(from,to).then(()=>{delete G.loading[k];render()}).catch(e=>{delete G.loading[k];toast(e.message)})}return G.events[k]}
@@ -510,8 +532,36 @@ function calCell(k,evs,label){
   const cls=[g?'g':'',g&&k===g.start?'s':'',g&&k===g.end?'e':'',k===now?'t':'',k===calSel?'sel':''].join(' ');
   return `<button class="${cls}" ${g?`style="--gc:${g.color}"`:''} data-act="csel" data-k="${k}" aria-label="${fmt(parseK(k),{weekday:'long',day:'numeric',month:'long'})}${g?', '+esc(g.name):''}">${label}${evs&&evsOn(evs,k).length?'<i></i>':''}</button>`;
 }
+const H0=7,H1=23;
+function evHours(e,k){
+  const s=new Date(e.start.dateTime),en=new Date(e.end.dateTime);
+  const sk=dkey(s),ek=dkey(en);
+  const a=sk<k?0:s.getHours()+s.getMinutes()/60,b=ek>k?24:en.getHours()+en.getMinutes()/60;
+  return [Math.max(a,H0),Math.min(b,H1)];
+}
+function layoutDay(items){
+  items.sort((x,y)=>x.s-y.s);const out=[];let cl=[],end=-1;
+  const flush=()=>{const cols=[];cl.forEach(it=>{let c=cols.findIndex(t=>t<=it.s+.001);if(c<0){c=cols.length;cols.push(0)}cols[c]=it.e;it.col=c});cl.forEach(it=>it.n=cols.length);out.push(...cl);cl=[]};
+  items.forEach(it=>{if(it.s>=end&&cl.length)flush();cl.push(it);end=Math.max(end,it.e)});flush();return out;
+}
+function hourGrid(n,evs){
+  const px=n===1?52:44,H=(H1-H0)*px,nowD=new Date(),nowK=dkey(nowD),nowH=nowD.getHours()+nowD.getMinutes()/60;
+  const days=[...Array(n)].map((_,i)=>addDays(agStart,i));
+  let ticks='';for(let i=H0;i<=H1;i++)ticks+=`<span class="t" style="top:${(i-H0)*px}px">${String(i).padStart(2,'0')}:00</span>`;
+  const heads=days.map(d=>{const k=dkey(d),g=groupOn(k);const allDay=(evs||[]).filter(e=>e.start.date&&evsOn([e],k).length);
+    return `<div class="hg-head ${k===nowK?'is-today':''}" ${g?`style="--gc:${g.color}"`:''}>${n>1?`<span>${JOURS_L[d.getDay()]}</span><b>${d.getDate()}</b>`:''}${g?`<em class="gtag">${esc(g.name)}</em>`:''}${allDay.map(e=>`<em class="allday">${esc(e.summary||'')}</em>`).join('')}</div>`}).join('');
+  const cols=days.map(d=>{const k=dkey(d),g=groupOn(k);
+    const items=(evs||[]).filter(e=>e.start.dateTime&&evsOn([e],k).length).map(e=>{const [s,en]=evHours(e,k);return {s,e:en,ev:e}}).filter(x=>x.e>x.s);
+    const L=layoutDay(items);
+    let lines='';for(let i=H0;i<=H1;i++)lines+=`<div class="hg-line" style="top:${(i-H0)*px}px"></div>`;
+    const blocks=L.map(it=>{const e=it.ev,st=new Date(e.start.dateTime),et=new Date(e.end.dateTime),tf=x=>x.toLocaleTimeString('fr-CH',{hour:'2-digit',minute:'2-digit'});const tall=(it.e-it.s)*px>34;
+      return `<div class="hg-ev" style="--c:${e._color||'var(--sage)'};top:${(it.s-H0)*px+1}px;height:${Math.max(16,(it.e-it.s)*px-3)}px;left:calc(${it.col/it.n*100}% + 1px);width:calc(${100/it.n}% - 2px)" title="${esc(e.summary||'')} · ${tf(st)}–${tf(et)}"><b>${esc(e.summary||'(sans titre)')}</b>${tall&&n<7?`<small>${tf(st)}–${tf(et)}${e.location&&n===1?' · '+esc(e.location):''}</small>`:''}</div>`}).join('');
+    const nowL=k===nowK&&nowH>=H0&&nowH<=H1?`<div class="hg-now" style="top:${(nowH-H0)*px}px"></div>`:'';
+    return `<div class="hg-col ${g?'grp':''}" style="height:${H}px;${g?'--gc:'+g.color:''}" ${gReady()?'data-act="slot"':''} data-k="${k}" data-px="${px}">${lines}${blocks}${nowL}</div>`}).join('');
+  return `<div class="hg-scroll"><div class="hg n${n}" style="--n:${n}"><div class="hg-corner"></div>${heads}<div class="hg-ticks" style="height:${H}px">${ticks}</div>${cols}</div></div>`;
+}
 function viewAgenda(){
-  const v=S.cfg.agView||'m',now=today();
+  const v=S.cfg.agView||'1',now=today();
   const seg=`<div class="seg" role="group" aria-label="Affichage">${AGV.map(([k,l])=>`<button data-act="agview" data-v="${k}" aria-pressed="${v===k}">${l}</button>`).join('')}</div>`;
   let main='',from,to,title;
   if(v==='m'||v==='14'){
@@ -528,13 +578,10 @@ function viewAgenda(){
   }else{
     const n=+v;from=new Date(agStart);from.setHours(0,0,0,0);to=addDays(from,n);
     const evs=rangeEvents(from,to);
-    title=`${fmt(agStart,{day:'numeric',month:'short'})} → ${fmt(addDays(agStart,n-1),{day:'numeric',month:'short'})}`;
-    const days=[...Array(n)].map((_,i)=>{const d=addDays(agStart,i),k=dkey(d),g=groupOn(k);
-      const body=gReady()?(evs?(evsOn(evs,k).map(evLine).join('')||'<p class="muted small">Libre</p>'):'<p class="muted small">Chargement…</p>'):'';
-      return `<div class="card daycard ${k===dkey(now)?'is-today':''}" ${g?`style="--gc:${g.color}"`:''}><div class="head-row"><h3>${fmt(d,{weekday:'long',day:'numeric',month:'short'})}</h3>${g?`<span class="gtag">${esc(g.name)}</span>`:''}${gReady()?`<button class="link" data-act="evadd" data-k="${k}">+ Ajouter</button>`:''}</div>${body}</div>`}).join('');
+    title=n===1?fmt(agStart,{weekday:'long',day:'numeric',month:'long'}):`${fmt(agStart,{day:'numeric',month:'short'})} → ${fmt(addDays(agStart,n-1),{day:'numeric',month:'short'})}`;
     main=`<div class="cal-nav card"><button class="icon-btn" data-act="agprev" aria-label="Précédent">‹</button><h3>${title}</h3><button class="icon-btn" data-act="agnext" aria-label="Suivant">›</button></div>
-      ${gReady()?'':`<div class="card stack">${googleCta('Connecte Google Agenda pour voir tes événements dans chaque jour.')}</div>`}
-      <div class="stack">${days}</div>`;
+      ${gReady()?'':`<div class="card stack">${googleCta('Connecte Google Agenda pour voir tes événements dans la grille.')}</div>`}
+      <div class="card hgrid-card">${hourGrid(n,evs)}</div>`;
   }
   const yA=dkey(from),yB=dkey(addDays(to,-1));
   const mg=S.groups.filter(g=>g.end>=yA&&g.start<=yB).sort((a,b)=>a.start.localeCompare(b.start));
@@ -546,7 +593,7 @@ function viewAgenda(){
     <div class="card stack"><h3>Périodes</h3>${grp?`<div class="groups">${grp}</div>`:'<p class="muted small">Ajoute une période (vacances, voyage, révisions) pour colorer plusieurs jours d’un coup.</p>'}</div>
   </section>`;
 }
-function agShift(dir){const v=S.cfg.agView||'m';if(v==='m')calMonth=new Date(calMonth.getFullYear(),calMonth.getMonth()+dir,1,12);else agStart=addDays(agStart,dir*(+v))}
+function agShift(dir){const v=S.cfg.agView||'1';if(v==='m')calMonth=new Date(calMonth.getFullYear(),calMonth.getMonth()+dir,1,12);else agStart=addDays(agStart,dir*(+v))}
 function googleCta(txt){
   if(canGoogle())return `<div class="note">${txt}</div><button class="btn" data-act="gconnect">Se connecter à Google</button>`;
   if(!S.cfg.clientId)return `<div class="note">${txt} Il manque une petite étape de réglage (gratuite) : je t’envoie les instructions.</div>`;
@@ -742,6 +789,7 @@ $('#view').addEventListener('click',async e=>{
     case 'hdel-no':editing=null;break;
     case 'hdel-yes':S.habits=S.habits.filter(h=>h.id!==d.id);Object.keys(S.log).forEach(k=>{S.log[k]=S.log[k].filter(x=>x!==d.id);if(!S.log[k].length)delete S.log[k]});editing=null;S.example=false;save();break;
     // agenda
+    case 'slot':{if(e.target.closest('.hg-ev'))return;const r=b.getBoundingClientRect(),hr=Math.floor(H0+(e.clientY-r.top)/(+d.px));calSel=d.k;openEventSheet(hr);return}
     case 'agprev':agShift(-1);break;
     case 'agnext':agShift(1);break;
     case 'agview':S.cfg.agView=d.v;agStart=today();calMonth=null;save();break;
@@ -825,11 +873,11 @@ function openGroupSheet(){
     if($('#gtog')&&$('#gtog').checked){try{await gf(`${CAL}/calendars/primary/events`,{method:'POST',body:JSON.stringify({summary:n,start:{date:a},end:{date:dkey(addDays(parseK(b),1))},transparency:'transparent'})});G.events={};toast('Ajouté dans Google Agenda')}catch(e){toast(e.message)}}},
   (e,f)=>{const c=e.target.closest('[data-c]');if(c){color=c.dataset.c;swatchPick(f,color)}});
 }
-function openEventSheet(){
+function openEventSheet(hr){const hs=String(hr!=null?hr:10).padStart(2,'0'),he=String(Math.min(23,(hr!=null?hr:10)+1)).padStart(2,'0');
   sheet(`<h2>Nouvel <em>événement</em></h2>
     <div class="field"><label for="en">Titre</label><input id="en" autocomplete="off"></div>
     <div class="field"><label for="ed">Jour</label><input type="date" id="ed" value="${calSel}"></div>
-    <div class="row2"><div class="field"><label for="es">Début</label><input type="time" id="es" value="10:00"></div><div class="field"><label for="ee">Fin</label><input type="time" id="ee" value="11:00"></div></div>
+    <div class="row2"><div class="field"><label for="es">Début</label><input type="time" id="es" value="${hs}:00"></div><div class="field"><label for="ee">Fin</label><input type="time" id="ee" value="${he}:00"></div></div>
     <div class="field"><label for="ecal">Calendrier</label><select id="ecal">${(G.cals||[]).filter(c=>c.accessRole==='owner'||c.accessRole==='writer').map(c=>`<option value="${esc(c.id)}">${esc(c.summary)}</option>`).join('')}</select></div>
     ${closeBtns('Ajouter')}`,
   async f=>{const n=$('#en').value.trim(),d=$('#ed').value;if(!n||!d)return false;
