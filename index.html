@@ -411,12 +411,12 @@ function loadGis(){
 function gConnect(silent){
   return loadGis().then(()=>new Promise((res,rej)=>{
     const tc=google.accounts.oauth2.initTokenClient({client_id:S.cfg.clientId,scope:GSCOPE,
-      callback:r=>{if(r.error){rej(new Error(r.error));return}G.token=r.access_token;G.exp=Date.now()+(r.expires_in-60)*1000;try{sessionStorage.setItem('jardin.g',JSON.stringify({t:G.token,e:G.exp}))}catch(e){}S.cfg.gOnce=true;save();res()},
+      callback:r=>{if(r.error){rej(new Error(r.error));return}G.token=r.access_token;G.exp=Date.now()+(r.expires_in-60)*1000;try{localStorage.setItem('jardin.g',JSON.stringify({t:G.token,e:G.exp}))}catch(e){}S.cfg.gOnce=true;save();res()},
       error_callback:e=>rej(new Error(e.type||'refus'))});
     tc.requestAccessToken({prompt:silent?'':'consent'});
   }));
 }
-try{const g=JSON.parse(sessionStorage.getItem('jardin.g'));if(g&&g.e>Date.now()){G.token=g.t;G.exp=g.e}}catch(e){}
+try{const g=JSON.parse(localStorage.getItem('jardin.g'));if(g&&g.e>Date.now()){G.token=g.t;G.exp=g.e}}catch(e){}
 async function gf(url,opt={}){
   if(!gReady())throw new Error('Non connectée');
   const r=await fetch(url,{...opt,headers:{Authorization:'Bearer '+G.token,'Content-Type':'application/json',...(opt.headers||{})}});
